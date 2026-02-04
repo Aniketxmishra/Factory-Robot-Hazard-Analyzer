@@ -1,6 +1,37 @@
 import java.util.Scanner;
 
 public class FactoryRobotHazardAnalyzer {
+
+    public static double calculateHazardRisk(double armPrecision, int workerDensity, String machineryState) {
+        // Validate arm precision
+        if (armPrecision < 0.0 || armPrecision > 1.0) {
+            System.out.println("Error: Arm precision must be 0.0-1.0");
+            return -1;
+        }
+
+        // Validate worker density
+        if (workerDensity < 1 || workerDensity > 20) {
+            System.out.println("Error: Worker density must be 1-20");
+            return -1;
+        }
+
+        // Determine machine risk factor and validate machinery state
+        double machineRiskFactor = 0.0;
+        if (machineryState.equals("Worn")) {
+            machineRiskFactor = 1.3;
+        } else if (machineryState.equals("Faulty")) {
+            machineRiskFactor = 2.0;
+        } else if (machineryState.equals("Critical")) {
+            machineRiskFactor = 3.0;
+        } else {
+            System.out.println("Error: Unsupported machinery state");
+            return -1;
+        }
+
+        // Calculate and return hazard risk
+        return (1.0 - armPrecision) * 15.0 + workerDensity * machineRiskFactor;
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -20,38 +51,11 @@ public class FactoryRobotHazardAnalyzer {
 
         System.out.println();
 
-        // Validate arm precision
-        if (armPrecision < 0.0 || armPrecision > 1.0) {
-            System.out.println("Error: Arm precision must be 0.0-1.0");
-            scanner.close();
-            return;
+        double hazardRisk = calculateHazardRisk(armPrecision, workerDensity, machineryState);
+
+        if (hazardRisk >= 0) {
+            System.out.println("Robot Hazard Risk Score: " + hazardRisk);
         }
-
-        // Validate worker density
-        if (workerDensity < 1 || workerDensity > 20) {
-            System.out.println("Error: Worker density must be 1-20");
-            scanner.close();
-            return;
-        }
-
-        // Determine machine risk factor and validate machinery state
-        double machineRiskFactor = 0.0;
-        if (machineryState.equals("Worn")) {
-            machineRiskFactor = 1.3;
-        } else if (machineryState.equals("Faulty")) {
-            machineRiskFactor = 2.0;
-        } else if (machineryState.equals("Critical")) {
-            machineRiskFactor = 3.0;
-        } else {
-            System.out.println("Error: Unsupported machinery state");
-            scanner.close();
-            return;
-        }
-
-        // Calculate hazard risk
-        double hazardRisk = (1.0 - armPrecision) * 15.0 + workerDensity * machineRiskFactor;
-
-        System.out.println("Robot Hazard Risk Score: " + hazardRisk);
 
         scanner.close();
     }
