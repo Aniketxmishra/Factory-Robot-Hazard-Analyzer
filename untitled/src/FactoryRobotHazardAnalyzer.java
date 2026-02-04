@@ -18,11 +18,21 @@ public class FactoryRobotHazardAnalyzer {
         System.out.print("Enter Machinery State (Worn/Faulty/Critical): ");
         String machineryState = scanner.nextLine();
 
+        // Determine machine risk factor based on machinery state
+        double machineRiskFactor = 0.0;
+        if (machineryState.equals("Worn")) {
+            machineRiskFactor = 1.3;
+        } else if (machineryState.equals("Faulty")) {
+            machineRiskFactor = 2.0;
+        } else if (machineryState.equals("Critical")) {
+            machineRiskFactor = 3.0;
+        }
+
+        // Calculate hazard risk
+        double hazardRisk = (1.0 - armPrecision) * 15.0 + workerDensity * machineRiskFactor;
+
         System.out.println();
-        System.out.println("Inputs Received:");
-        System.out.println("Arm Precision: " + armPrecision);
-        System.out.println("Worker Density: " + workerDensity);
-        System.out.println("Machinery State: " + machineryState);
+        System.out.println("Robot Hazard Risk Score: " + hazardRisk);
 
         scanner.close();
     }
